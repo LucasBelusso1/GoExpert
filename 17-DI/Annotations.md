@@ -91,3 +91,6 @@ wire.Bind(new(product.ProductRepositoryInterface), new(*product.ProductRepositor
 
 Assim informamos ao `wire` que sempre que um `product.ProductRepositoryInterface` for uma dependência de algo, ele
 utilizará `*product.ProductRepository` no lugar.
+
+**IMPORTANTE:** Para executar o script utilizando o wire, é necessário rodar `go run main.go wire_gen.go`, pois ambos
+pertencem ao pacote `main`.
