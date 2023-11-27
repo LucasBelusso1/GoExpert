@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: lucasbelusso1/19-deploydockerkubernetes:latest
+        resources:
+          limits:
+            memory: "32Mi"
+            cpu: "100m"
+
+          # Startup probe
+          startupProbe: # Verifica ao iniciar o container a primeira vez
+            httpGet: # Realiza uma chamada http
+              path: / # Para o path / (normalmente se cria uma rota /health que verifica uma séried de coisas, como banco de dados entre outras coisas).
+              port: 8080 # Na porta 8080
+            periodSeconds: 10 # A cada 10 segundos
+            failureThreshold: 10 # Se após 10 tentativas houver falha, desiste.
+
+          readinessProbe: # Verifica o tempo todo após a aplicação subir
+            httpGet: # Realiza uma chamada http
+              path: / # Para o path /
+              port: 8080 # Na porta 8080
+            periodSeconds: 10 # A cada 10 segundos
+            failureThreshold: 2  # Se após 2 tentativas houver falha, o service parará de mandar tráfego para este pod.
+            timeoutSeconds: 5 # Define um tempo de timeout para cada tentaiva
+
+          livenessProbe: # Caso o pod esteja com problema, fará o restart dele dependendo das regras definidas abaixo.
+            httpGet: # Realiza uma chamada http
+              path: / # Para o path /
+              port: 8080 # Na porta 8080
+            periodSeconds: 10 # A cada 10 segundos
+            failureThreshold: 3  # Se após 3 tentativas houver falha, o service parará de mandar tráfego para este pod.
+            timeoutSeconds: 5 # Define um tempo de timeout para cada tentaiva
+            successThreshold: 1 # Após um caso de sucesso, reinicia a contagem.
+        ports:
+        - containerPort: 8080
