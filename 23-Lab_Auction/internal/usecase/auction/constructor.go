@@ -13,7 +13,7 @@ type AuctionUseCase struct {
 func NewAuctionUseCase(
 	auctionRepository auction_entity.AuctionRepositoryInterface,
 	bidRepository bid_entity.BidRepositoryInterface,
-) *AuctionUseCase {
+) AuctionUseCaseInterface {
 	return &AuctionUseCase{
 		AauctionRepository: auctionRepository,
 		BidRepository:      bidRepository,

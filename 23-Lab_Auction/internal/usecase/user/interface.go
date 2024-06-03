@@ -7,5 +7,5 @@ import (
 )
 
 type UserUseCaseInterface interface {
-	FindUserById(ctx context.Context, id string) (*UserOutputDTO, internal_error.InternalError)
+	FindUserById(ctx context.Context, id string) (*UserOutputDTO, *internal_error.InternalError)
 }
